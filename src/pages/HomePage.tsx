@@ -30,8 +30,17 @@ export const HomePage = ({}: pageProps) => {
 	} = useForm<ResumeFormType>({
 		resolver: zodResolver(ZOD.resume),
 	});
-	const submitHandler = (values: ResumeFormType) => {
+	const submitHandler = async (values: ResumeFormType) => {
 		console.log(values);
+		const res = await fetch("http://localhost:80/api/create-resume", {
+			// body: JSON.stringify(values),
+			headers: { "Content-Type": "application/json" },
+		}).then(async (res) => {
+			console.log(res);
+			const data = await res.json();
+			console.log(data);
+		});
+		console.log(res);
 	};
 	console.log(errors);
 	return (
@@ -39,6 +48,7 @@ export const HomePage = ({}: pageProps) => {
 			<main className="h-full w-full flex flex-col justify-center  items-center">
 				<form
 					onSubmit={handleSubmit(submitHandler)}
+					action="http://localhost:80/api/get-resume"
 					className=" relative space-y-4 w-full  overflow-hidden"
 				>
 					<m.div
@@ -52,14 +62,14 @@ export const HomePage = ({}: pageProps) => {
 							<Input required {...register("email")} label="email" />
 							<Input {...register("phone")} label="phone" />
 							<Input {...register("jobTitle")} label="job title" />
-							<Input {...register("city")} label="city" />
+							<Input {...register("home")} label="home" />
 						</Slide>
 						<Slide>
 							<TextArea
-								label="summery"
+								label="profile"
 								className=" w-full resize-none"
 								placeholder="write a summury about yourself"
-								{...register("summery")}
+								{...register("profile")}
 							/>
 							<MultiInput<LanguageInputType>
 								title="languages"
@@ -67,21 +77,14 @@ export const HomePage = ({}: pageProps) => {
 								limit={4}
 								defaultValue={{ name: "english", level: "native" }}
 							>
-								{({ fields, remove, setItemProp }) =>
-									fields?.map((field, index) => (
+								{({ fields, remove }) =>
+									fields?.map((_, index) => (
 										<div
 											key={index}
 											className="flex w-full border-2 border-neutral-revert rounded items-center justify-between"
 										>
 											<input
-												{...register(`languages.${index}.name`, {
-													onChange: (e: ChangeEvent) => {
-														const input = e.target as HTMLInputElement;
-														const value = input.value;
-														setItemProp(index, "name", value);
-													},
-													value: field.name,
-												})}
+												{...register(`languages.${index}.name`)}
 												placeholder="write a language"
 												className="    h-8 px-2  bg-transparent w-full "
 											/>
@@ -116,10 +119,10 @@ export const HomePage = ({}: pageProps) => {
 							<MultiInput<SkillInputType>
 								title="skills"
 								placeholder="add a skill"
-								limit={30}
+								limit={10}
 								defaultValue={{ name: "", level: "biggener" }}
 							>
-								{({ fields, remove, setItemProp }) =>
+								{({ fields, remove }) =>
 									fields?.map((field, index) => (
 										<div
 											key={index}
@@ -127,11 +130,6 @@ export const HomePage = ({}: pageProps) => {
 										>
 											<input
 												{...register(`skills.${index}.name`, {
-													onChange: (e: ChangeEvent) => {
-														const input = e.target as HTMLInputElement;
-														const value = input.value;
-														setItemProp(index, "name", value);
-													},
 													value: field.name,
 												})}
 												placeholder="write a skill"
@@ -168,7 +166,7 @@ export const HomePage = ({}: pageProps) => {
 							<MultiInput<ExperienceInputType>
 								title="experiences"
 								placeholder="add an experiance"
-								limit={30}
+								limit={5}
 								emty
 								defaultValue={{
 									jobTitle: "",
@@ -265,7 +263,7 @@ export const HomePage = ({}: pageProps) => {
 							<MultiInput<LinkInputType>
 								title="useful links"
 								placeholder="add an link"
-								limit={5}
+								limit={8}
 								defaultValue={{
 									name: "",
 									link: "",
@@ -318,23 +316,23 @@ export const HomePage = ({}: pageProps) => {
 					<div className=" flex px-8 justify-center gap-8">
 						{x > 0 && (
 							<Btn
-								className=" w-40 h-10 md:absolute md:top-0 md:left-0 md:h-full"
+								className=" w-40 md:w-20 h-10 md:absolute md:top-0 md:left-0 md:h-full"
 								onClick={() => circle(x - 1)}
 							>
-								<Icon.leftArrow />
+								<Icon.leftArrow className="size-6 md:size-10" />
 							</Btn>
 						)}
 						{x < numOfSlides - 1 && (
 							<Btn
-								className=" w-40 h-10 md:absolute md:top-0 md:right-0 md:h-full"
+								className=" w-40 md:w-20 h-10 md:absolute md:top-0 md:right-0 md:h-full"
 								onClick={() => circle()}
 							>
-								<Icon.rightArrow />
+								<Icon.rightArrow className="size-6 md:size-10" />
 							</Btn>
 						)}
 						{x === numOfSlides - 1 && (
 							<Btn
-								className=" w-40 h-10 md:absolute md:top-0 md:right-0 md:h-full"
+								className=" w-40 md:w-20 h-10 md:absolute md:top-0 md:right-0 md:h-full"
 								type="submit"
 							>
 								submit
@@ -348,8 +346,8 @@ export const HomePage = ({}: pageProps) => {
 };
 const Slide = ({ children }: { children: ReactNode }) => {
 	return (
-		<section className="  w-screen  grid  ">
-			<div className=" bg-neutral  overfloe-y-scroll  mx-auto  w-full  max-w-[520px]   p-4">
+		<section className="  w-screen overflow-y-scroll remove-scroll-bar  grid  ">
+			<div className=" bg-neutral    mx-auto  w-full  max-w-[520px]   p-4">
 				{children}
 			</div>
 		</section>
