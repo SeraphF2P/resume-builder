@@ -1,81 +1,4 @@
-// index.js
-import cors from "cors";
-import express from "express";
-import { jsPDF } from 'jspdf';
-
-const app = express();
-const PORT = 4000;
-
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(cors());
-app.set("view engine", "ejs")
-
-app.get("/", (req, res) => {
-  res.send("Hello from 'Resume Builder' Web App");
-});
-
-app.get("/api/preview/template/:templateId", async (req, res) => {
-  const values = req.query
-  const templateId = req.params.templateId
-
-  async function downloadPdf() {
-    console.log("asdasd")
-    const filename = crypto.randomUUID();
-    const pdf = await new jsPDF({
-      orientation: "landscape",
-      unit: "in",
-      format: [4, 2]
-    });
-
-    // Add your HTML content here (e.g., document.body.innerHTML)
-    // ...
-
-    await pdf.html(document.body, {
-      // Add your HTML content here
-      // ...
-    }).then(async () => {
-      await pdf.save(filename, { returnPromise: true })
-        .catch(err => console.error("err", err));
-    });
-  }
-  res.render(`templates/${templateId}`, { ...values, downloadPdf })
-});
-// app.get("/api/preview/template/:templateId/download", async (req, res) => {
-//   // const values = req.body
-//   // const templateId = req.params.templateId
-//   const filename = crypto.randomUUID()
-//   const pdf = new jsPDF({ orientation: "landscape", unit: "in", format: [4, 2] });
-
-//   await pdf.html(`
-//      <html>
-//       <body style="height: 100svh; width: 100svh; background-color: red;" >
-//           <p>don't print this to pdf</p>
-//           <div id="pdf">
-//               <p><font size="3" color="red">print this to pdf</font></p>
-//           </div>
-//       </body>
-//      </html>
-//   `, {
-//     html2canvas: { width: 180, x: 10, y: 10, height: 180 },
-//   }).catch(err => console.error("err", err)).then(async () => {
-//     await pdf.save(`./pdfs/${filename}.pdf`, { returnPromise: true })
-//       .then(() => {
-//         res.download(`./pdfs/${filename}.pdf`)
-//       });
-//   });
-
-
-// });
-
-
-
-
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
-function createHtmlPage(values) {
-  return `<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -342,7 +265,9 @@ h3 {
     line-height: 48px;
   }
 }
-
+/*
+! tailwindcss v3.4.1 | MIT License | https://tailwindcss.com
+*/
 
 /*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
@@ -367,22 +292,47 @@ h3 {
   --tw-content: '';
 }
 
+/*
+1. Use a consistent sensible line-height in all browsers.
+2. Prevent adjustments of font size after orientation changes in iOS.
+3. Use a more readable tab size.
+4. Use the user's configured `sans` font-family by default.
+5. Use the user's configured `sans` font-feature-settings by default.
+6. Use the user's configured `sans` font-variation-settings by default.
+7. Disable tap highlights on iOS
+*/
+
 html,
 :host {
   line-height: 1.5;
+  /* 1 */
   -webkit-text-size-adjust: 100%;
+  /* 2 */
   -moz-tab-size: 4;
+  /* 3 */
   -o-tab-size: 4;
      tab-size: 4;
+  /* 3 */
   font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  /* 4 */
   font-feature-settings: normal;
+  /* 5 */
   font-variation-settings: normal;
+  /* 6 */
   -webkit-tap-highlight-color: transparent;
+  /* 7 */
 }
+
+/*
+1. Remove the margin in all browsers.
+2. Inherit line-height from `html` so users can set them as a class directly on the `html` element.
+*/
 
 body {
   margin: 0;
+  /* 1 */
   line-height: inherit;
+  /* 2 */
 }
 
 /*
@@ -441,15 +391,38 @@ strong {
   font-weight: bolder;
 }
 
+/*
+1. Use the user's configured `mono` font-family by default.
+2. Use the user's configured `mono` font-feature-settings by default.
+3. Use the user's configured `mono` font-variation-settings by default.
+4. Correct the odd `em` font sizing in all browsers.
+*/
 
+code,
+kbd,
+samp,
+pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  /* 1 */
+  font-feature-settings: normal;
+  /* 2 */
+  font-variation-settings: normal;
+  /* 3 */
+  font-size: 1em;
+  /* 4 */
+}
 
-
+/*
+Add the correct font size in all browsers.
+*/
 
 small {
   font-size: 80%;
 }
 
-
+/*
+Prevent `sub` and `sup` elements from affecting the line height in all browsers.
+*/
 
 sub,
 sup {
@@ -539,13 +512,17 @@ button,
   /* 2 */
 }
 
-
+/*
+Use the modern Firefox focus style for all focusable elements.
+*/
 
 :-moz-focusring {
   outline: auto;
 }
 
-
+/*
+Remove the additional `:invalid` styles in Firefox. (https://github.com/mozilla/gecko-dev/blob/2f9eacd9d3d995c937b4251a5557d95d494c9be1/layout/style/res/forms.css#L728-L737)
+*/
 
 :-moz-ui-invalid {
   box-shadow: none;
@@ -580,13 +557,18 @@ Correct the cursor style of increment and decrement buttons in Safari.
   /* 2 */
 }
 
-
+/*
+Remove the inner padding in Chrome and Safari on macOS.
+*/
 
 ::-webkit-search-decoration {
   -webkit-appearance: none;
 }
 
-
+/*
+1. Correct the inability to style clickable types in iOS and Safari.
+2. Change font properties to `inherit` in Safari.
+*/
 
 ::-webkit-file-upload-button {
   -webkit-appearance: button;
@@ -685,7 +667,19 @@ button,
   cursor: pointer;
 }
 
+/*
+Make sure disabled buttons don't get the pointer cursor.
+*/
 
+:disabled {
+  cursor: default;
+}
+
+/*
+1. Make replaced elements `display: block` by default. (https://github.com/mozdevs/cssremedy/issues/14)
+2. Add `vertical-align: middle` to align replaced elements more sensibly by default. (https://github.com/jensimmons/cssremedy/issues/14#issuecomment-634934210)
+   This can trigger a poorly considered lint error in some tools but is included by design.
+*/
 
 img,
 svg,
@@ -859,11 +853,11 @@ video {
   bottom: 1rem;
 }
 
-.-left-1/2 {
+.-left-1\/2 {
   left: -50%;
 }
 
-.left-1/2 {
+.left-1\/2 {
   left: 50%;
 }
 
@@ -876,12 +870,12 @@ video {
   height: 2.5rem;
 }
 
-.translate-x-1/2 {
+.translate-x-1\/2 {
   --tw-translate-x: 50%;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
-.-translate-x-1/2 {
+.-translate-x-1\/2 {
   --tw-translate-x: -50%;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
@@ -931,7 +925,7 @@ ul {
 <body>
   <div class="rela-block page">
     <div class="rela-block top-bar">
-        <div class="caps name"><div class="abs-center">${values.fullName}</div></div>
+        <div class="caps name"><div class="abs-center"><%= locals.fullName  %></div></div>
     </div>
     <div class="side-bar">
         <div class="mugshot">
@@ -979,11 +973,15 @@ ul {
         <p class="light">Third Job Description</p>
         <p class="justified">Next level roof party lo-fi fingerstache skateboard, kogi tumblr. Shabby chic put a bird on it chambray, 3 wolf moon swag beard brooklyn post-ironic taxidermy art party microdosing keffiyeh marfa. Put a bird on it 3 wolf moon cliche helvetica knausgaard. Mumblecore fingerstache lomo, artisan freegan keffiyeh paleo kinfolk kale chips street art blog flannel.</p>
     </div>
+    	<button
+       onclick=<%= downloadPdf %>
+				class="px-4 py-2 rounded-full h-10 bg-blue-600 fixed bottom-4 -translate-x-1/2 left-1/2"
+				>
+     download
+      </button>
 </div>
 
 
 </body>
 </html>
 
-`
-}

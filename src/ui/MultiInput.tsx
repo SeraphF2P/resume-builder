@@ -22,6 +22,7 @@ export function MultiInput<T>({
 	emty = false,
 }: MultiInputProps<T>) {
 	const [fields, handlers] = useListState<T>(emty ? [] : [defaultValue]);
+
 	return (
 		<>
 			<label className="    my-4 capitalize">{title}</label>
