@@ -1,6 +1,7 @@
 import { z } from 'zod'
 export default {
   resume: z.object({
+    templateId: z.number().int().optional().default(1),
     fullName: z.string().min(3, "name must be between 3 and 30 characters").max(30, "name must be between 3 and 30 characters"),
     email: z.string().email("wrong email format"),
     phone: z.string().min(3, "phone must be between 3 and 30 characters").max(30, "phone must be between 3 and 30 characters").optional(),

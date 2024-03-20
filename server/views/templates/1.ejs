@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=30px,height=100px initial-scale=1.0">
+  <meta name="viewport" content="width=1023px,height=1820px initial-scale=1.0">
   <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
   <!-- FONTS -->
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600' rel='stylesheet' type='text/css'>
@@ -14,6 +14,9 @@
     * {
   box-sizing: border-box;
   transition: 0.35s ease;
+}
+canvas {
+  display: none !important;
 }
 .rela-block {
   display: block;
@@ -91,12 +94,31 @@ h3 {
   color: #000;
 }
 .page {
-  width: 90%;
-  max-width: 1200px;
-  margin: 80px auto;
+   width: 90%;
+    margin-block: 80px;
+    margin-inline: calc(5%);
   background-color: #fff;
   box-shadow: 6px 10px 28px 0px rgba(0,0,0,0.4);
 }
+.side-bar {
+  display: false;
+  position: absolute;
+  margin: false;
+  top: 60px;
+  left: 5%;
+  right: false;
+  bottom: 0;
+  width: 350px;
+  background-color: #f7e0c1;
+  padding: 320px 30px 50px;
+}
+/* @media screen and (min-width:420px) {
+  .page{
+    width: 90%;
+    margin-block: 80px;
+    margin-inline: calc(5%);
+  }
+} */
 .top-bar {
   height: 220px;
   background-color: #848484;
@@ -121,18 +143,8 @@ h3 {
 .name div {
   width: 94%;
 }
-.side-bar {
-  display: false;
-  position: absolute;
-  margin: false;
-  top: 60px;
-  left: 5%;
-  right: false;
-  bottom: 0;
-  width: 350px;
-  background-color: #f7e0c1;
-  padding: 320px 30px 50px;
-}
+
+
 .mugshot {
   display: false;
   position: absolute;
@@ -255,24 +267,8 @@ h3 {
   font-weight: 600;
   line-height: 28px;
 }
-@media screen and (max-width: 1150px) {
-  .name {
-    color: #fff;
-    font-family: 'Raleway';
-    font-size: 38px;
-    letter-spacing: 6px;
-    font-weight: 100;
-    line-height: 48px;
-  }
-}
-/*
-! tailwindcss v3.4.1 | MIT License | https://tailwindcss.com
-*/
 
-/*
-1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
-2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)
-*/
+
 
 *,
 ::before,
@@ -923,7 +919,7 @@ ul {
   </style>
 </head>
 <body>
-  <div class="rela-block page">
+  <main class="rela-block page">
     <div class="rela-block top-bar">
         <div class="caps name"><div class="abs-center"><%= locals.fullName  %></div></div>
     </div>
@@ -973,14 +969,38 @@ ul {
         <p class="light">Third Job Description</p>
         <p class="justified">Next level roof party lo-fi fingerstache skateboard, kogi tumblr. Shabby chic put a bird on it chambray, 3 wolf moon swag beard brooklyn post-ironic taxidermy art party microdosing keffiyeh marfa. Put a bird on it 3 wolf moon cliche helvetica knausgaard. Mumblecore fingerstache lomo, artisan freegan keffiyeh paleo kinfolk kale chips street art blog flannel.</p>
     </div>
-    	<button
-       onclick=<%= downloadPdf %>
-				class="px-4 py-2 rounded-full h-10 bg-blue-600 fixed bottom-4 -translate-x-1/2 left-1/2"
-				>
-     download
-      </button>
-</div>
+  </main>
+  <button
+  id="downloadBtn"
+    class="px-4 py-2 rounded-full h-10 bg-blue-600 fixed bottom-4 -translate-x-1/2 left-1/2"
+    >
+ download
+  </button>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.js"/></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script  >
+const main = document.querySelector('main')
+document.getElementById("downloadBtn").addEventListener("click", async ()=> {
+    window.html2canvas(main,{
+      useCORS:true,
+      logging:true,
+      letterRendering:1,
+      windowHeight:1820,
+      windowWidth:1023,
+      removeContainer:true
+    }).then(async(canvas)=>{
+      const imgWidth =208
+      const imgHeight = canvas.height * imgWidth / canvas.width
+      const imgData = canvas.toDataURL("image/png");
+      document.body.appendChild(canvas);
+       const pdf = await  new window.jspdf.jsPDF("p","mm","a4");
+       pdf.addImage(imgData,"PNG",0,0,imgWidth,imgHeight)
+       pdf.save("my-resume")
+    })
+})
 
+</script>
 
 </body>
 </html>

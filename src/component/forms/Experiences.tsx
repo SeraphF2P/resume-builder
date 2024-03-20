@@ -13,7 +13,6 @@ export const Experiences = () => {
 		formState: { errors },
 	} = useFormContext<ResumeFormType>();
 	const experiences = useFieldArray({ name: "experiences", control });
-	console.log(errors);
 	const getlangError = (index: number) => {
 		const err = errors.experiences && errors.experiences[index];
 		if (err)

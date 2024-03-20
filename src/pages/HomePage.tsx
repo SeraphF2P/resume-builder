@@ -11,6 +11,8 @@ import { UsefullLinks } from "../component/forms/UsefullLinks";
 import ZOD from "../lib/ZOD";
 import { Btn } from "../ui/Btn";
 import { Icon } from "../ui/Icons";
+import { createSearchParams, useNavigate } from "react-router-dom";
+import { ElementRef, useRef } from "react";
 const forms = [
 	{
 		component: PersonalInformation,
@@ -37,6 +39,7 @@ export const HomePage = () => {
 	const methods = useForm<ResumeFormType>({
 		resolver: zodResolver(ZOD.resume),
 		defaultValues: {
+			templateId: 1,
 			languages: [{ name: "English", level: "native" }],
 			skills: [{ name: "", level: "biggener" }],
 			experiences: [
@@ -55,33 +58,20 @@ export const HomePage = () => {
 		},
 		mode: "all",
 	});
-
+	const FormRef = useRef<ElementRef<"form">>(null);
 	const submitHandler = async (values: ResumeFormType) => {
-		console.log(values);
-		// window.location.assign(`http://localhost:80/api/preview/template/${1}`);
-		// console.log(values);
-		// const res = await fetch("http://localhost:80/api/create-resume", {
-		// 	// body: JSON.stringify(values),
-		// 	headers: { "Content-Type": "application/json" },
-		// }).then(async (res) => {
-		// 	console.log(res);
-		// 	const data = await res.json();
-		// 	console.log(data);
-		// });
-		// console.log(res);
+		if (!FormRef.current) return;
+		FormRef.current.action = `http://localhost:4000/api/preview/template/${values.templateId}`;
+		FormRef.current?.submit();
 	};
-	console.log(methods.formState.errors);
-	// console.log(() => {
-	// 	for (const i in methods.formState.errors) return false;
-	// 	return true;
-	// });
+
 	return (
 		<>
 			<main className="h-full w-full flex flex-col justify-center  items-center">
 				<FormProvider {...methods}>
 					<form
-						// onSubmit={methods.handleSubmit(submitHandler)}
-						action="http://localhost:4000/api/preview/template/1"
+						ref={FormRef}
+						onSubmit={methods.handleSubmit(submitHandler)}
 						className=" relative space-y-4 w-full  overflow-hidden"
 					>
 						<m.div

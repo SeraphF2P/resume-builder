@@ -14,8 +14,6 @@ export const Profile = () => {
 		formState: { errors },
 	} = useFormContext<ResumeFormType>();
 	const languages = useFieldArray({ name: "languages", control });
-	console.log(languages);
-	console.log(errors);
 	const getlangError = (index: number) => {
 		const err = errors.languages && errors.languages[index];
 		if (err) return err?.level?.message || err?.name?.message;

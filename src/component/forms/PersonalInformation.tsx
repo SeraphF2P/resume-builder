@@ -5,7 +5,6 @@ export const PersonalInformation = () => {
 		register,
 		formState: { errors },
 	} = useFormContext<ResumeFormType>();
-	console.log(errors);
 	return (
 		<>
 			<Input
