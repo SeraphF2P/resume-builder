@@ -5,6 +5,7 @@ import { Icon } from "../../ui/Icons";
 import { MultiInputSection } from "../MultiInputSection";
 import { ErrorMessage } from "../../ui/ErrorMessage";
 import { Fragment } from "react/jsx-runtime";
+import { TextArea } from "../../ui/TextArea";
 
 export const Experiences = () => {
 	const {
@@ -18,9 +19,10 @@ export const Experiences = () => {
 		if (err)
 			return (
 				err?.jobTitle?.message ||
-				err?.location?.message ||
-				err?.location?.message ||
-				err?.location?.message
+				err?.description?.message ||
+				err?.timePeriod?.message ||
+				err?.timePeriod?.from?.message ||
+				err?.timePeriod?.to?.message
 			);
 	};
 	return (
@@ -81,6 +83,11 @@ export const Experiences = () => {
 							</div>
 						</div>
 					</div>
+					<TextArea
+						label="description"
+						className=" resize-none"
+						{...register(`experiences.${index}.description`)}
+					/>
 					<ErrorMessage message={getlangError(index)} />
 				</Fragment>
 			))}
@@ -90,6 +97,7 @@ export const Experiences = () => {
 						experiences.append({
 							jobTitle: "",
 							location: "",
+							description: "",
 							timePeriod: { from: new Date(), to: new Date() },
 						})
 					}

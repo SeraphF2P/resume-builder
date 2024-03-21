@@ -13,6 +13,7 @@ export default {
       level: z.enum(["biggener", "intermediate", "advanced", "expert"])
     })).optional().default([]),
     experiences: z.array(z.object({
+      description: z.string().min(8, "description must be between 8 and 256 characters").max(256, "description must be between 8 and 256 characters"),
       jobTitle: z.string().min(3, "job title must be between 3 and 30 characters").max(30, "job title must be between 3 and 30 characters"),
       timePeriod: z.object({
         from: z.date(),
