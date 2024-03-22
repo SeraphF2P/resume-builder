@@ -57,56 +57,13 @@ export const HomePage = () => {
 		},
 		mode: "all",
 	});
-	const values = {
-		"languages.0.name": "Eric Vincent",
-		"languages.0.level": "advanced",
-		"languages.1.name": "Eric Vincent",
-		"languages.1.level": "advanced",
-		"skills.0.name": "Jocelyn Lott",
-		"skills.0.level": "advanced",
-		"experiences.0.jobTitle": "Excepturi esse dese",
-		"experiences.0.location": "Ut irure voluptas la",
-		"experiences.0.timePeriod.from": "2024/03",
-		"experiences.0.timePeriod.to": "2024/03",
-		"links.0.name": "Kelsey Walters",
-		"links.0.link": "https://www.husyfynute.org.au",
-	};
-	// const convertToObjectOfArrays = (values) => {
-	// 	const result = {};
 
-	// 	for (const key in values) {
-	// 		const [parentKey, childKey, property] = key.split(".");
-	// 		const index = parseInt(childKey);
-
-	// 		if (!result[parentKey]) {
-	// 			result[parentKey] = [];
-	// 		}
-
-	// 		if (!result[parentKey][index]) {
-	// 			result[parentKey][index] = {};
-	// 		}
-
-	// 		if (property.includes(".")) {
-	// 			const [nestedProperty, nestedSubProperty] = property.split(".");
-	// 			if (!result[parentKey][index][nestedProperty]) {
-	// 				result[parentKey][index][nestedProperty] = {};
-	// 			}
-	// 			result[parentKey][index][nestedProperty][nestedSubProperty] =
-	// 				values[key];
-	// 		} else {
-	// 			result[parentKey][index][property] = values[key];
-	// 		}
-	// 	}
-
-	// 	return result;
-	// };
-
-	// const valuesObject = convertToObjectOfArrays(values);
-	// console.log(valuesObject);
 	const FormRef = useRef<ElementRef<"form">>(null);
 	const submitHandler = async (values: ResumeFormType) => {
 		if (!FormRef.current) return;
-		FormRef.current.action = `http://localhost:4000/api/preview/template/${values.templateId}`;
+		FormRef.current.action =
+			import.meta.env.VITE_APP_BASE_URL +
+			`/api/preview/template/${values.templateId}`;
 		FormRef.current.submit();
 	};
 	return (

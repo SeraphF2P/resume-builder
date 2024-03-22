@@ -62,10 +62,6 @@ app.get("/api/preview/template/:templateId", async (req, res) => {
   res.render(`templates/${templateId}/index.ejs`, values)
 });
 
-
-
-
-
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
